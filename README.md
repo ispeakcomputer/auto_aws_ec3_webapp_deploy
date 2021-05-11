@@ -33,4 +33,4 @@ Then the Bash script does following:
 
 A tiny custom Django webapp with gif image I made will be hosted on the deployed Ec3 instance
 
-!(webapp)[/images/webapp.png]
+!(webapp)[images/webapp.png]
