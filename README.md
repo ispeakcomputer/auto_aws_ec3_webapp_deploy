@@ -28,3 +28,9 @@ Then the Bash script does following:
 6. Make the start script execute with ```chmod +x start_here.sh ```
 7. Run the script with ```./start_here.sh```
 8. Wait till the script finishes running and visit the DNS name of the Ec2 host it gives you in the browser.
+
+## Results
+
+A tiny custom Django webapp with gif image I made will be hosted on the deployed Ec3 instance
+
+!(webapp)[/images/webapp.png]
