@@ -26,7 +26,7 @@ Then the Bash script does the following:
 4. Next run ```python3 -m venv venv ``` to create a virtual environment
 5. Next run ```source venv/bin/activate```
 6. Next Install all our requirements ```python3 -m pip install -r requirements.txt ``` 
-7. Run ```python3 -m awscli configure``` and enter your keys and secrets from step 1.
+7. Open **start_here.sh** and enter your keys and secrets from step 1 where you see **AWS_SECRET_ACCESS_KEY** and **AWS_ACCESS_KEY_ID**. Save and close.
 8. Make the start script execute with ```chmod +x start_here.sh ```
 9. Run the script with ```./start_here.sh```
 10. Wait till the script finishes running and visit the DNS name of the Ec2 host it gives you in the browser. 
