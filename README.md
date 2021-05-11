@@ -10,7 +10,7 @@ This Python3 script first does the following on AWS
 
 1. Sets up, or checks on VPC 
 2. Checks security groups and add rules for TCP port 22 and port 80
-3. Set ups key-pairs and write .pem file to disk to be used for later access by script/user
+3. Set up key-pairs and write .pem file to disk to be used for later access by script/user
 4. Deploys an EC2 instance using the security groups, rules and keypairs
 
 Then the Bash script does following:
@@ -34,3 +34,10 @@ Then the Bash script does following:
 A tiny custom Django webapp with gif image I made will be hosted on the deployed Ec3 instance
 
 ![webapp](/images/webapp.png)
+
+## Access Your Instance
+Your private keys file with be saved to the current working directory. 
+
+You can use ssh with the following command using the correct key file to login via SSH.
+
+```ssh -i "key-pair-4756d380-b219-11eb-b0a7-a088b45856c8.pem" admin@<DNS NAME HERE>```
