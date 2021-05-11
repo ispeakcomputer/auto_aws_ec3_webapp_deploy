@@ -21,7 +21,7 @@ Then the Bash script does the following:
 ## Installation
 
 1. First grab a access key id / secret access key for AWS programmatic access [by reading this](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys)
-2. Clone this repo with ```git@github.com:ispeakcomputer/auto_aws_ec3_webapp_deploy.git```
+2. Clone this repo with ```git clone git@github.com:ispeakcomputer/auto_aws_ec3_webapp_deploy.git```
 3. Run ```cd auto_aws_ec3_webapp_deploy ```to move into directory
 4. Next run ```python3 -m venv venv ``` to create a virtual environment
 5. Next run ```source venv/bin/activate```
