@@ -30,7 +30,7 @@ Then the Bash script does the following:
 8. Make the start script execute with ```chmod +x start_here.sh ```
 9. Run the script with ```./start_here.sh```
 10. Wait till the script finishes running and visit the DNS name of the Ec2 host it gives you in the browser. 
-11. To run script again just run ```./start_here``` only
+11. To run script again just run ```./start_here``` 
 
 ## Results
 
