@@ -53,6 +53,72 @@ class Deployer:
             logging.info("key created")
             return keypair_name
     
+    """Update Security Group of EC2 instance"""
+    def setup_security_group(self):
+        response = self.client.describe_vpcs()
+        vpc_id = response.get('Vpcs', [{}])[0].get('VpcId', '')
+        try:    
+            response = self.client.create_security_group(GroupName='SECURITY_GROUP_NAME',
+                                                    Description='DESCRIPTION',
+                                                    VpcId=vpc_id)
+            security_group_id = response['GroupId']
+            logging.info("Security Group Created %s in vpc %s." % (security_group_id, vpc_id))
+            data = self.client.authorize_security_group_ingress(
+                                                    GroupId=security_group_id,
+                                                    IpPermissions=[
+                                                    {'IpProtocol': 'tcp',
+                                                    'FromPort': 80,
+                                                    'ToPort': 80,
+                                                    'IpRanges': [{'CidrIp': '0.0.0.0/0'}]},
+                                                    {'IpProtocol': 'tcp',
+                                                    'FromPort': 22,
+                                                    'ToPort': 22,
+                                                    'IpRanges': [{'CidrIp': '0.0.0.0/0'}]}
+                                                    ])
+            print('Ingress Successfully Set %s' % data)
+        except ClientError as e:
+            logging.error(e)
+        except InvalidGroup.Duplicate as e:
+            logging.info(e)
+            
+    """Create EC2 instance"""
+    def create_ec2_instance(self):
+        
+        try:
+            response = self.ec2.create_instances(ImageId='ami-0528712befcd5d885',
+                                            MinCount=1, 
+                                            MaxCount=1,
+                                            InstanceType='m1.small',
+                                            KeyName=keypair_name)
+        except botocore.exceptions.ClientError as e:
+            logging.error("Key pair didn't create before launching EC2 Instance")
+        
+        try:
+            instance_id = response[0].instance_id
+            logging.info("Created instance - instance id : " + str(instance_id))
+            #print(response)
+            instance = response[0]
+            instance.wait_until_running()
+            # Reload the instance attributes
+            instance.load()
+            logging.info("Instance now fully loaded and DNS name is : " + str (instance.public_dns_name))
+            
+            return instance.public_dns_name 
+        except NameError:
+            logging.error("No response from ec2 object. Something went wrong, try again")
+        
+    """Run Simple Shell Script To Install Docker and Run"""
+    def shell_script_webapp_deploy(self, keypair_name, dns_name):
+        try:        
+            subprocess.run(["chmod", "+x", "setup_docker.sh"])
+            key_file = str(keypair_name) + ".pem"
+            subprocess.run(["./setup_docker.sh", str(dns_name), key_file])
+            
+            logging.info("Please View App At : " + str(dns_name))
+            return True
+        except:
+            logging.error("Something went wrong with shell script. Check instance dns name and keypairs")
+            return False
 
 if __name__ == "__main__":
 
