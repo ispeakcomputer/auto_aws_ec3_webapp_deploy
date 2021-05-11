@@ -10,14 +10,11 @@ logging.basicConfig(handlers=[logging.FileHandler(filename="deploy.log",
                                                  encoding='utf-8', mode='w')],
                                                  format="%(asctime)s %(name)s:%(levelname)s:%(message)s", 
                                                  datefmt="%F %A %T", 
-                                                 level=logging.DEBUG)
+                                                 level=logging.INFO)
 
 keypair_id = "key-pair"
 UID = uuid.uuid1()
 keypair_name = keypair_id + "-" + str(UID)
-#key= os.environ['AWS_SECRET_ACCESS_KEY']
-#secret = os.environ['AWS_ACCESS_KEY_ID']
-#aws_region = os.environ['YOUR_AWS_REGION']
 
 class Deployer:
     def __init__(self):
@@ -50,7 +47,7 @@ class Deployer:
             private_key = keypair["KeyMaterial"]
             with os.fdopen(os.open( keypair_name + ".pem", os.O_WRONLY | os.O_CREAT, 0o400), "w+") as handle:
                     handle.write(private_key)
-            logging.info("key created")
+            logging.info("key created ->" + keypair_name + ".pem")
             return keypair_name
     
     """Update Security Group of EC2 instance"""
@@ -75,7 +72,7 @@ class Deployer:
                                                     'ToPort': 22,
                                                     'IpRanges': [{'CidrIp': '0.0.0.0/0'}]}
                                                     ])
-            print('Ingress Successfully Set %s' % data)
+            logging.info('Ingress Successfully Set %s' % data)
         except ClientError as e:
             logging.error(e)
         except InvalidGroup.Duplicate as e:
@@ -96,7 +93,7 @@ class Deployer:
         try:
             instance_id = response[0].instance_id
             logging.info("Created instance - instance id : " + str(instance_id))
-            #print(response)
+            
             instance = response[0]
             instance.wait_until_running()
             # Reload the instance attributes
