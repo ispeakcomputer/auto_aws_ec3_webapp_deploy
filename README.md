@@ -43,4 +43,6 @@ Your private keys file with be saved to the current working directory.
 
 You can use ssh with the following command using the correct key file to login via SSH.
 
+Find the key name, instance, and dns name in the log file within **deploy.log**
+
 ```ssh -i "key-pair-4756d380-b219-11eb-b0a7-a088b45856c8.pem" admin@<DNS NAME HERE>```
