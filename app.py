@@ -119,20 +119,33 @@ class Deployer:
 
 if __name__ == "__main__":
 
-    print('\033[95m' + ' *Setting up, and checking VPC, Security groups and rules, key-pairs and EC2 instance. Please wait*')
-    print('\033[39m')
-
-    deployer = Deployer()
-    deployer.vpc_deployer()
-    keys_response = deployer.keypair_deployer()
-    keypair_name = deployer.private_key_saver(keys_response)
-    deployer.setup_security_group()
-    dns_name = deployer.create_ec2_instance()
-    execution = deployer.shell_script_webapp_deploy(keypair_name,dns_name)
+    aws_secret = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    aws_key = os.environ.get('AWS_ACCESS_KEY_ID')
     
-    if execution:
-        print('\033[95m' + ' *Visit The Deployed Webapp Here --> ' + str(dns_name))
-        print('\033[39m')
+    if not aws_secret and aws_key:
+            print('\033[31m' + 'Please enter your aws secret and key. ')
+            print('\033[39m')
     else:
-        print('\033[31m' + 'Shell Script had issues. Check logs for more details or try again because ssh didn not respond')
-        print('\033[39m')
+            print('\033[95m' + ' *Setting up, and checking VPC, Security groups and rules, key-pairs and EC2 instance. Please wait*')
+            print('\033[39m')
+        
+            try:
+                deployer = Deployer()
+                deployer.vpc_deployer()
+                keys_response = deployer.keypair_deployer()
+                keypair_name = deployer.private_key_saver(keys_response)
+                deployer.setup_security_group()
+                dns_name = deployer.create_ec2_instance()
+                execution = deployer.shell_script_webapp_deploy(keypair_name,dns_name)
+                    
+                if execution:
+                    print('\033[95m' + ' *Visit The Deployed Webapp Here --> ' + str(dns_name))
+                    print('\033[39m')
+                else:
+                    print('\033[31m' + 'Shell Script had issues. Check logs for more details or try again because ssh didn not respond')
+                    print('\033[39m')
+            
+            except botocore.exceptions.ClientError as e:
+                if e.response['Error']['Code'] == 'AuthFailure':
+                    print('\033[31m' + 'Your AWS creds are incorrect. Replace and try again ')
+                    print('\033[39m')
