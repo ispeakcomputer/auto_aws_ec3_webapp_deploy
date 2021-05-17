@@ -4,7 +4,7 @@
 This automation runs with a single command and then responds with the AWS EC2 instance DNS name
 that is hosting a custom Django webapp. 
 
-## Design - Step by Step
+## Design - Automation Step by Step 
 
 This Python3 script first does the following on AWS
 
@@ -13,7 +13,7 @@ This Python3 script first does the following on AWS
 3. Set up key-pairs and write .pem file to disk to be used for later access by script/user
 4. Deploys an EC2 instance using the security groups, rules and keypairs
 
-Then the Bash script does the following:
+Then the Bash script does the following after fired from the Python script:
 1. Connects to the EC2 instance using the .pem file
 2. Sets up docker per dockers documentation over SSH
 3. Uses Docker to run my custom Django webapp on port 80
